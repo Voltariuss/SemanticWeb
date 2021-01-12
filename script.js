@@ -3,7 +3,8 @@ function onSubmitFilters () {
 }
 
 function dbPediaRequest (sparqlRequest, callback) {
-  $.ajax({
-    url: `http://dbpedia.org/sparql?default-graph-uri=http://dbpedia.org&query=${sparqlRequest}&output=json`
+  $.get('http://dbpedia.org/sparql', {
+    query: sparqlRequest,
+    output: 'json'
   }).done(callback);
 }
