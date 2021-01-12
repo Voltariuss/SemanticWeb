@@ -11,42 +11,73 @@
       <div class="row">
         <h1 class="text-center">Web sémantique - Criminels</h1>
       </div>
-      <div class="row" id="filters">
-        <div class="container">
+      <form class="row" id="filters">
+        <fieldset class="container">
+          <legend>Filtres</legend>
           <div class="row">
-            <label for="filter-1" class="form-label col-4">Nom</label>
-            <input type="text" class="form-control col-8" id="filter-1">
+            <label for="filter-1" class="form-label">Nom</label>
+            <div>
+              <input type="text" class="form-control" id="filter-1">
+            </div>
           </div>
           <div class="row">
-            <label for="filter-2" class="form-label col-4">Alias</label>
-            <input type="text" class="form-control col-8" id="filter-2">
+            <label for="filter-2" class="form-label mt-3">Alias</label>
+            <div>
+              <input type="text" class="form-control" id="filter-2">
+            </div>
           </div>
           <div class="row">
-            <label for="filter-3" class="form-label col-4">Charge criminelle</label>
-            <input type="text" class="form-control col-8" id="filter-3">
+            <label for="filter-3" class="form-label mt-3">Charge criminelle</label>
+            <div>
+              <input type="text" class="form-control" id="filter-3">
+            </div>
           </div>
           <div class="row">
-            <label for="filter-4" class="form-label col-4">Condamnation</label>
-            <input type="text" class="form-control col-8" id="filter-4">
+            <label for="filter-4" class="form-label mt-3">Condamnation</label>
+            <div>
+              <input type="text" class="form-control" id="filter-4">
+            </div>
           </div>
           <div class="row">
-            <label for="filter-5" class="form-label col-4">Motif</label>
-            <input type="text" class="form-control col-8" id="filter-5">
+            <label for="filter-5" class="form-label mt-3">Motif</label>
+            <div>
+              <input type="text" class="form-control" id="filter-5">
+            </div>
           </div>
           <div class="row">
-            <label for="filter-6" class="form-label col-4">Apprehended</label>
-            <input type="text" class="form-control col-8" id="filter-6">
+            <label for="filter-6" class="form-label mt-3">Date d'arrestation</label>
+            <div class="container-fluid">
+              <div class="row justify-content-between">
+                <span class="col">
+                  <input type="date" class="form-control" id="filter-6-1">
+                </span>
+                <span class="col">
+                  <input type="date" class="form-control col-2" id="filter-6-2">
+                </span>
+              </div>
+            </div>
           </div>
           <div class="row">
-            <label for="filter-7" class="form-label col-4">Nombre de victimes</label>
-            <input type="text" class="form-control col-8" id="filter-7">
+            <label for="filter-7" class="form-label mt-3">Nombre de victimes</label>
+            <div class="container-fluid">
+              <div class="row justify-content-between">
+                <span class="col">
+                  <input type="date" class="form-control" id="filter-7-1">
+                </span>
+                <span class="col">
+                  <input type="date" class="form-control col-2" id="filter-7-2">
+                </span>
+              </div>
+            </div>
           </div>
           <div class="row">
-            <label for="filter-8" class="form-label col-4">Pays</label>
-            <input type="text" class="form-control col-8" id="filter-8">
+            <label for="filter-8" class="form-label mt-3">Pays</label>
+            <div>
+              <input type="text" class="form-control" id="filter-8">
+            </div>
           </div>
-        </div>
-      </div>
+        </fieldset>
+      </form>
     </header>
     <footer class="container-fluid mt-3">
       <p class="text-center">@Copyright de folie - 2021</p>
