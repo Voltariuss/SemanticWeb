@@ -39,6 +39,11 @@ const predicates = [
 ]
 
 const promises = predicates.map((p) => { return generateRequest(criminal, p) })
+promises.push(
+
+);
+
+
 Promise.all(promises)
     .then(results => {
         // build dom
@@ -47,5 +52,5 @@ Promise.all(promises)
 
 
 function buildDOM(results) {
-
+    console.log(results)
 }
