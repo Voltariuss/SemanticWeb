@@ -27,7 +27,7 @@ function generateRequest(resource, predicate) {
         PREFIX dbpedia2: <http://dbpedia.org/property/>
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX c: <http://dbpedia.org/ontology/Criminal>
-        PREFIX criminal: <http://dbpedia.org/resource/`+resource+`>
+        PREFIX criminal: <`+resource+`>
 
         SELECT * WHERE {
         criminal: `+predicate+` ?value.
