@@ -1,8 +1,13 @@
-const criminalURI = 'http://dbpedia.org/resource/John_Edward_Robinson'
+const urlParams = new URLSearchParams(window.location.search);
+const criminalId = urlParams.get('id');
+const criminalURI = 'http://dbpedia.org/resource/'+criminalId;
+
+
 
 const fields = [
     'name',
     'alias',
+    'label',
     'criminalCharge',
     'convictionPenalty',
     'motive',
@@ -22,6 +27,7 @@ const fields = [
 const predicates = [
     'foaf:name',
     'dbpedia2:alias',
+    'rdfs:label',
     'dbo:criminalCharge',
     'dbo:convictionPenalty',
     'dbo:motive',
@@ -44,6 +50,11 @@ Promise.all(promises)
         // build dom
         buildDOM(results);
     })
+
+function getResourceIdFromUri(uri) {
+    const splitUri = uri.split('/');
+    return splitUri[splitUri.length - 1];
+}
 
 function buildDOM(data) {
     console.log('buildDom');
@@ -72,13 +83,29 @@ function buildDOM(data) {
     }
 
 
-    requestSameYear('dbo:apprehended', criminal.apprehended[0]['value'], criminalURI).done((data2) => {
+    requestSameYear('dbo:apprehended', criminal.apprehended[0]['value'].split('-')[0], criminalURI).done((data2) => {
         console.log(data2);
 
-        // $('#apprehended_same_year')
+        let str = '<ul>';
+        for (let k = 0; k < data2['results']['bindings'].length; ++k) {
+            const target = getResourceIdFromUri(data2['results']['bindings'][k]['criminal']['value']);
+
+            if (data2['results']['bindings'][k]['label']) {
+                // Le nom existe
+                str += '<li><a href="./criminal.html?id='+target+'">'+data2['results']['bindings'][k]['label']['value'] + '</a></li>';
+            }
+            else {
+                // Le nom n'existe pas, on prend l'URI
+                str += '<li><a href="./criminal.html?id='+target+'">'+data2['results']['bindings'][k]['criminal']['value'] + '</a></li>';
+            }
+        }
+        str += '</ul>';
+
+        $('#apprehended_same_year').append(str);
     })
 
     console.log(criminal)
 
-    
+
 }
+

@@ -51,11 +51,15 @@ function requestSameURI(predicate, uri, currentCriminal) {
       PREFIX dbpedia2: <http://dbpedia.org/property/>
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       PREFIX criminal: <http://dbpedia.org/ontology/Criminal>
-      SELECT ?criminal ?name WHERE {
+      SELECT ?criminal ?name ?label WHERE {
           ?criminal a criminal:.
           OPTIONAL { 
             ?criminal foaf:name ?name 
             FILTER (lang(?name) = 'en')
+          }.
+          OPTIONAL { 
+            ?criminal rdfs:label ?label
+            FILTER (lang(?label) = 'en') 
           }.
           ?criminal ${predicate} <${uri}>.
           FILTER (?criminal != <${currentCriminal}>)
@@ -80,11 +84,15 @@ function requestContainsText(predicate, text, currentCriminal) {
       PREFIX dbpedia2: <http://dbpedia.org/property/>
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       PREFIX criminal: <http://dbpedia.org/ontology/Criminal>
-      SELECT ?criminal ?name WHERE {
+      SELECT ?criminal ?name ?label WHERE {
           ?criminal a criminal:.
           OPTIONAL { 
             ?criminal foaf:name ?name
             FILTER (lang(?name) = 'en') 
+          }.
+          OPTIONAL { 
+            ?criminal rdfs:label ?label
+            FILTER (lang(?label) = 'en') 
           }.
           ?criminal ${predicate} ?value.
           FILTER(CONTAINS(lcase(str(?value)), "${text}"))
@@ -111,11 +119,15 @@ function requestSameYear(predicate, year, currentCriminal) {
       PREFIX dbpedia2: <http://dbpedia.org/property/>
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       PREFIX criminal: <http://dbpedia.org/ontology/Criminal>
-      SELECT ?criminal ?name WHERE {
+      SELECT ?criminal ?name ?label WHERE {
           ?criminal a criminal:.
           OPTIONAL { 
             ?criminal foaf:name ?name
             FILTER (lang(?name) = 'en') 
+          }.
+          OPTIONAL { 
+            ?criminal rdfs:label ?label
+            FILTER (lang(?label) = 'en') 
           }.
           ?criminal ${predicate} ?value.
           FILTER(year(?value) = ${year})
@@ -125,7 +137,7 @@ function requestSameYear(predicate, year, currentCriminal) {
   )
 }
 
-function requestResourceName(resource) {
+function requestResourceLabel(resource) {
   return dbPediaRequest(`
       PREFIX owl: <http://www.w3.org/2002/07/owl#>
       PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -140,9 +152,9 @@ function requestResourceName(resource) {
       PREFIX foaf: <http://xmlns.com/foaf/0.1/>
       PREFIX dbpedia2: <http://dbpedia.org/property/>
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-      SELECT ?name WHERE {
-          ${resource} foaf:name ?name
-          FILTER (lang(?name) = 'en')
+      SELECT ?label WHERE {
+          ${resource} rdfs:label ?label
+          FILTER (lang(?label) = 'en')
       }
       `
   )
