@@ -63,7 +63,8 @@ function requestSameURI(predicate, uri, currentCriminal) {
           }.
           ?criminal ${predicate} <${uri}>.
           FILTER (?criminal != <${currentCriminal}>)
-      }   
+      }
+      ORDER BY ?criminal
       `
   )
 }
@@ -84,7 +85,7 @@ function requestContainsText(predicate, text, currentCriminal) {
       PREFIX dbpedia2: <http://dbpedia.org/property/>
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
       PREFIX criminal: <http://dbpedia.org/ontology/Criminal>
-      SELECT ?criminal ?name ?label WHERE {
+      SELECT ?criminal ?name ?label ?value WHERE {
           ?criminal a criminal:.
           OPTIONAL { 
             ?criminal foaf:name ?name
@@ -98,6 +99,7 @@ function requestContainsText(predicate, text, currentCriminal) {
           FILTER(CONTAINS(lcase(str(?value)), "${text}"))
           FILTER(?criminal != <${currentCriminal}>)
       }
+      ORDER BY ?criminal
       `
   )
 }
@@ -133,6 +135,7 @@ function requestSameYear(predicate, year, currentCriminal) {
           FILTER(year(?value) = ${year})
           FILTER (?criminal != <${currentCriminal}>)
       }
+      ORDER BY ?criminal
       `
   )
 }

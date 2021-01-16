@@ -51,9 +51,93 @@ Promise.all(promises)
         buildDOM(results);
     })
 
+function getResourceName(resource, def) {
+    if (resource['label']) {
+        return resource['label']['value'];
+    } else if (resource['name']) {
+        return resource['name']['value'];
+    } else {
+        return resource[def]['value'];
+    }
+}
+
 function getResourceIdFromUri(uri) {
     const splitUri = uri.split('/');
     return splitUri[splitUri.length - 1];
+}
+
+function showSameApprehendedYear(criminal) {
+    requestSameYear('dbo:apprehended', criminal.apprehended[0]['value'].split('-')[0], criminalURI).done((other) => {
+        let str = '<ul>';
+        for (let c of other['results']['bindings']) {
+            const target = getResourceIdFromUri(c['criminal']['value']);
+            str += '<li><a href="./criminal.html?id='+target+'">' + getResourceName(c, 'criminal') + '</a></li>';
+        }
+        str += '</ul>';
+        $('#same_apprehended_year_list').append(str);
+    });
+}
+
+
+function showSameConvictionPenalty(criminal) {
+    requestSameURI('dbo:convictionPenalty', criminal.convictionPenalty[0]['value'], criminalURI).done((other) => {
+        let str = '<ul>';
+        for (let c of other['results']['bindings']) {
+            const target = getResourceIdFromUri(c['criminal']['value']);
+            str += '<li><a href="./criminal.html?id='+target+'">' + getResourceName(c, 'criminal') + '</a></li>';
+        }
+        str += '</ul>';
+        $('#same_conviction_penalty_list').append(str);
+    });
+}
+
+function showSimilarCriminalCharge(criminal) {
+    let str = '<ul>';
+
+const promises = criminal.criminalCharge[0]['value'].split(/[;.,()]/)
+        .map(s => s.trim())
+        .filter(s => s.length > 0) 
+        .map(piece => {
+            console.log(piece)
+            return requestContainsText('dbo:criminalCharge', piece.toLowerCase(), criminalURI)
+    });
+
+    Promise.all(promises).then(pieces => {
+        
+        for (let piece of pieces) {
+            for (let c of piece['results']['bindings']) {
+                const target = getResourceIdFromUri(c['criminal']['value']);
+                str += '<li><a href="./criminal.html?id='+target+'">' + getResourceName(c, 'criminal') + '</a> (' + c['value']['value'] + ') </li>';
+            }
+        }
+        str += '</ul>';
+        $('#similar_criminal_charge_list').append(str);
+    })
+    
+}
+
+function showSimilarMotive(criminal) {
+    let str = '<ul>';
+
+    const promises = criminal.criminalCharge[0]['value'].split(/[;.,()]/)
+        .map(s => s.trim())
+        .filter(s => s.length > 0) 
+        .map(piece => {
+            return requestContainsText('dbo:motive', piece.toLowerCase(), criminalURI)
+    });
+
+    Promise.all(promises).then(pieces => {
+        
+        for (let piece of pieces) {
+            for (let c of piece['results']['bindings']) {
+                const target = getResourceIdFromUri(c['criminal']['value']);
+                str += '<li><a href="./criminal.html?id='+target+'">' + getResourceName(c, 'criminal') + '</a> (' + c['value']['value'] + ') </li>';
+            }
+        }
+        str += '</ul>';
+        $('#similar_criminal_charge_list').append(str);
+    })
+    
 }
 
 function buildDOM(data) {
@@ -82,30 +166,28 @@ function buildDOM(data) {
         }
     }
 
+    // Show criminals with the same apprehended year
+    if (criminal.apprehended.length > 0) {
+        showSameApprehendedYear(criminal);
+    } else {
+        $('#same_apprehended_year').hide();
+    }
 
-    requestSameYear('dbo:apprehended', criminal.apprehended[0]['value'].split('-')[0], criminalURI).done((data2) => {
-        console.log(data2);
+    // Show criminals with the same conviction penalty
+    if (criminal.convictionPenalty.length > 0) {
+        showSameConvictionPenalty(criminal);
+    } else {
+        $('#same_conviction_penalty').hide();
+    }
 
-        let str = '<ul>';
-        for (let k = 0; k < data2['results']['bindings'].length; ++k) {
-            const target = getResourceIdFromUri(data2['results']['bindings'][k]['criminal']['value']);
+    // Show criminals with similar criminal charge
+    if (criminal.criminalCharge.length > 0) {
+        showSimilarCriminalCharge(criminal);
+    } else {
+        $('#similar_criminal_charge').hide();
+    }
 
-            if (data2['results']['bindings'][k]['label']) {
-                // Le nom existe
-                str += '<li><a href="./criminal.html?id='+target+'">'+data2['results']['bindings'][k]['label']['value'] + '</a></li>';
-            }
-            else {
-                // Le nom n'existe pas, on prend l'URI
-                str += '<li><a href="./criminal.html?id='+target+'">'+data2['results']['bindings'][k]['criminal']['value'] + '</a></li>';
-            }
-        }
-        str += '</ul>';
-
-        $('#apprehended_same_year').append(str);
-    })
-
-    console.log(criminal)
-
+    console.log(criminal);
 
 }
 
