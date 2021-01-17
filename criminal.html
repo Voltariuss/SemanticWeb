@@ -4,48 +4,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"
+        integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf"
+        crossorigin="anonymous"></script>
     <title>Web sémantique - Criminels</title>
 </head>
 
 <body class="p-4">
-    <h1 id="label"></h1>
-    <div><b>Name : </b><span id="name"></span></div>
-    <div><b>Alias : </b><span id="alias"></span></div>
-    <div><b>Commentaire :</b> <div id="comment"></div></div>
-
-    <br />
-
-    <div><b>Charge criminelle :</b> <span id="criminalCharge"></span></div>
-    <div><b>Peine :</b> <span id="convictionPenalty"></span></div>
-    <div><b>Motivations :</b> <span id="motive"></span></div>
-    <div><b>Apprehended :</b> <span id="apprehended"></span></div>
-    <div><b>Victimes :</b> <span id="victims"></span></div>
-    <div><b>Pays :</b> <span id="country"></span></div>
-    <div><b>Date de naissance :</b> <span id="birthDate"></span></div>
-    <div><b>Année de naissance :</b> <span id="birthPlace"></span></div>
-    <div><b>Parents :</b> <span id="parents"></span></div>
-    <div><b>Date de décès :</b> <span id="deathDate"></span></div>
-    <div><b>Lieu de décès :</b> <span id="deathPlace"></span></div>
-    <div><b>Occupation :</b> <span id="occupation"></span></div>
-    <div><b>Image :</b> <div id="imageName"></div></div>
-
-    
-    <div id="same_apprehended_year">
-        Apprehended on the same year: <div id="same_apprehended_year_list"></div>
+    <div id="criminal_info_loading">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
     </div>
+    <div id="criminal_info">
+        <h1 id="label"></h1>
+        <div><b>Name : </b><span id="name"></span></div>
+        <div><b>Alias : </b><span id="alias"></span></div>
+        <div><b>Commentaire :</b>
+            <div id="comment"></div>
+        </div>
 
-    <div id="same_conviction_penalty">
-        Criminal with the same conviction penalty: <div id="same_conviction_penalty_list"></div>
-    </div>
+        <br />
 
-    <div id="similar_criminal_charge">
-        Criminal with similar criminal charge: <div id="similar_criminal_charge_list"></div>
+        <div><b>Charge criminelle :</b> <span id="criminalCharge"><i>Undetermined</i></span></div>
+        <div><b>Peine :</b> <span id="convictionPenalty"><i>Undetermined</i></span></div>
+        <div><b>Motivations :</b> <span id="motive"><i>Undetermined</i></span></div>
+        <div><b>Apprehended :</b> <span id="apprehended"><i>Undetermined</i></span></div>
+        <div><b>Victimes :</b> <span id="victims"><i>Undetermined</i></span></div>
+        <div><b>Pays :</b> <span id="country"><i>Undetermined</i></span></div>
+        <div><b>Date de naissance :</b> <span id="birthDate"><i>Undetermined</i></span></div>
+        <div><b>Année de naissance :</b> <span id="birthPlace"><i>Undetermined</i></span></div>
+        <div><b>Parents :</b> <span id="parents"><i>Undetermined</i></span></div>
+        <div><b>Date de décès :</b> <span id="deathDate"><i>Undetermined</i></span></div>
+        <div><b>Lieu de décès :</b> <span id="deathPlace"><i>Undetermined</i></span></div>
+        <div><b>Occupation :</b> <span id="occupation"><i>Undetermined</i></span></div>
+        <div><b>Image :</b>
+            <div id="imageName"></div>
+        </div>
+        
+        
+        <div id="same_apprehended_year">
+            Apprehended on the same year: 
+            <div id="same_apprehended_year_loading">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="same_apprehended_year_list"></div>
+        </div>
+
+        
+        <div id="same_conviction_penalty">
+            Criminal with the same conviction penalty: 
+            <div id="same_conviction_penalty_loading">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="same_conviction_penalty_list"></div>
+        </div>
+
+        
+        <div id="similar_criminal_charge">
+            Criminal with similar criminal charge:
+            <div id="similar_criminal_charge_loading">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div> 
+            <div id="similar_criminal_charge_list"></div>
+        </div>
+
+        <div id="similar_motive">
+            Criminal with similar motive: 
+            <div id="similar_motive_loading">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="similar_motive_list"></div>
+        </div>
     </div>
 </body>
 
-<script src="./jquery.js"></script>
 <script src="./script.js"></script>
 <script src="./criminal.js"></script>
+
 </html>
