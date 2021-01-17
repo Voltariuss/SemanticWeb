@@ -155,8 +155,15 @@ function requestResourceLabel(resource) {
       PREFIX foaf: <http://xmlns.com/foaf/0.1/>
       PREFIX dbpedia2: <http://dbpedia.org/property/>
       PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-      SELECT ?label WHERE {
-          ${resource} rdfs:label ?label
+      SELECT ?label ?name <${resource}> as ?resource WHERE {
+          OPTIONAL { 
+            <${resource}> foaf:name ?name
+            FILTER (lang(?name) = 'en') 
+          }.
+          OPTIONAL { 
+            <${resource}> rdfs:label ?label
+            FILTER (lang(?label) = 'en') 
+          }.
           FILTER (lang(?label) = 'en')
       }
       `

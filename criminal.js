@@ -2,6 +2,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const criminalId = urlParams.get('id');
 const criminalURI = 'http://dbpedia.org/resource/' + criminalId;
 
+
 const fields = [
     'name',
     'alias',
@@ -22,6 +23,26 @@ const fields = [
     'imageName'
 ]
 
+const fieldTypes = [
+    'str',
+    'str',
+    'str',
+    'str',
+    'resource',
+    'str',
+    'date',
+    'str',
+    'str',
+    'date',
+    'resource',
+    'str',
+    'date',
+    'resource',
+    'str',
+    'resource',
+    'image'
+]
+
 const predicates = [
     'foaf:name',
     'dbpedia2:alias',
@@ -38,11 +59,13 @@ const predicates = [
     'dbo:deathDate',
     'dbo:deathPlace',
     'rdfs:comment',
-    'dbpedia2:occupation',
+    'dbo:occupation',
     'dbpedia2:imageName'
 ]
 
 $('#criminal_info').hide();
+$('title').html(`${criminalId} - Web sémantique`);
+
 const promises = predicates.map((p) => { return generateRequest(criminalURI, p) })
 Promise.all(promises)
     .then(results => {
@@ -170,11 +193,34 @@ function buildDOM(data) {
 
             // Si l'API a retourné une ligne anglaise
             if (criminal[fields[i]][0] != undefined) {
-                if (fields[i] == 'imageName') {
-                    const imgName = criminal[fields[i]][0]['value']
-                    $('#' + fields[i]).html(`<img src="https://wikipedia.org/wiki/Special:FilePath/${imgName}" title="${imgName}" alt="${imgName}" />`)
-                } else {
-                    $('#' + fields[i]).html(criminal[fields[i]][0]['value']);
+                switch (fieldTypes[i]) {
+                    case 'image':
+                        const imgName = criminal[fields[i]][0]['value']
+                        $('#' + fields[i]).html(`<img src="https://wikipedia.org/wiki/Special:FilePath/${imgName}" title="${imgName}" alt="${imgName}" />`)
+                        break;
+                    case 'date':
+                        const date = criminal[fields[i]][0]['value'];
+                        const year = date.substr(0, 4);
+                        const month = date.substr(5, 2);
+                        const day = date.substr(8, 2);
+                        $('#' + fields[i]).html(`${day}/${month}/${year}`);
+                        break;
+                    case 'resource':
+                        $('#' + fields[i]).html(criminal[fields[i]].map(e => getResourceIdFromUri(e['value'])).join(', '));
+                        Promise.all(criminal[fields[i]].map(e => requestResourceLabel(e['value']))).then(labels => {
+                            labels = labels.map((l, i) => {
+                                if (l['results']['bindings'].length == 0) {
+                                    return getResourceIdFromUri(criminal[fields[i]][i]['value']);
+                                } else {
+                                    return getResourceName(l['results']['bindings'][0], 'resource');
+                                }
+                            });
+                            $('#' + fields[i]).html(labels.join(', '));
+                        });
+                        break;
+                    default:
+                        $('#' + fields[i]).html(criminal[fields[i]].map(e => e['value']).join(', '));
+                        break;
                 }
             }
         }
@@ -206,6 +252,13 @@ function buildDOM(data) {
         showSimilarMotive(criminal);
     } else {
         $('#similar_motive').hide();
+    }
+
+    
+    if (criminal.label.length > 0) {
+        $('title').html(`${criminal.label[0]['value']} - Web sémantique`);
+    } else if (criminal.name.length > 0) {
+        $('title').html(`${criminal.name[0]['value']} - Web sémantique`);
     }
 
     console.log(criminal);
