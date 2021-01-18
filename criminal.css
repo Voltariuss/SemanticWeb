@@ -28,7 +28,7 @@ b.att {
     font-size: 0.8em;
 }
 
-#content {
+#criminal_info {
     background: repeat-y url("images/Old-Paper-Texture-3.jpg");
     background-size: 100%;
     margin: auto;
@@ -40,6 +40,7 @@ b.att {
     padding-bottom: 2%;
     box-shadow: 0px 0px 22px 7px rgba(112,111,111,0.92);
     border-radius: 10px;
+    position: relative;
 }
 
 .imageName {

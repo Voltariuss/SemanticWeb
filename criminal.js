@@ -67,13 +67,28 @@ $('#criminal_info').hide();
 $('title').html(`${criminalId} - Web sémantique`);
 
 const randomAngle = (Math.random() * 6) - 3;
+const randomAngleContent = (Math.random() * 2) - 1;
 $('#imageName').css('transform','rotate('+randomAngle+'deg)');
+$('#criminal_info').css('transform','rotate('+randomAngleContent+'deg)');
+$('.def_blocks').each((i, o) => {
+    o.innerHTML = '█'.repeat(Math.floor(Math.random() * 5) + 10);
+});
 
 const promises = predicates.map((p) => { return generateRequest(criminalURI, p) })
 Promise.all(promises)
     .then(results => {
+        // animation to show the criminal card
         $('#criminal_info').show();
+        $('#criminal_info').css('opacity', '0');
+        $('#criminal_info').css('bottom', '-200px');
+        $('#criminal_info').animate({
+            bottom: 0,
+            opacity: 1,
+          }, {
+              easing: 'swing'
+          });
         $('#criminal_info_loading').hide();
+
         // build dom
         buildDOM(results);
     })
