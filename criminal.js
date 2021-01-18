@@ -66,7 +66,7 @@ const predicates = [
 $('#criminal_info').hide();
 $('title').html(`${criminalId} - Web sémantique`);
 
-const randomAngle = (Math.random() * 4) - 2;
+const randomAngle = (Math.random() * 6) - 3;
 $('#imageName').css('transform','rotate('+randomAngle+'deg)');
 
 const promises = predicates.map((p) => { return generateRequest(criminalURI, p) })
@@ -202,7 +202,7 @@ function buildDOM(data) {
                         $('#' + fields[i]).html(`<img src="https://wikipedia.org/wiki/Special:FilePath/${imgName}" 
                                                         title="${imgName}" 
                                                         alt="${imgName}" 
-                                                        class="${fields[i]}"/>`)
+                                                        class="${fields[i]} shadow rounded"/>`)
                         break;
                     case 'country':
                         for (let j = 0; j < criminal[fields[i]].length; ++j) {
