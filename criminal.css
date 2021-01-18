@@ -13,6 +13,35 @@
     font-family: typewriter;
 }
 
+body {
+    background-color: #3a3939;
+}
+
+#content {
+    background: repeat-y url("images/Old-Paper-Texture-3.jpg");
+    background-size: 100%;
+    margin: auto;
+    min-height: 750px;
+    width: 750px;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    box-shadow: 0px 0px 22px 7px rgba(112,111,111,0.92);
+    border-radius: 10px;
+}
+
+#imageName {
+    margin: auto;
+    width: 256px;
+    max-width: 256px;
+}
+
+.imageName {
+    max-width: 256px;
+    max-height: 512px;
+}
+
 .flag {
     border: 1px solid;
     margin-right: 16px;

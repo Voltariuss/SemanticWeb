@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="criminal.css">
+    
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="criminal.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
         integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
         crossorigin="anonymous"></script>
@@ -21,36 +22,39 @@
 </head>
 
 <body class="p-4">
-    <div id="criminal_info_loading">
-        <div class="d-flex justify-content-center">
-            <div class="spinner-border" role="status">
-                <span class="sr-only">Loading...</span>
+    <div id="content">
+        <div id="criminal_info_loading">
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
         </div>
+        <div id="criminal_info">
+            <h1 id="label"></h1>
+            <div><b>Name : </b><span id="name"></span></div>
+            <div><b>Alias : </b><span id="alias"></span></div>
+            <div id="imageName"></div>
+            <div><b>Country :</b> <span id="country"></span></div>
+            <div id="comment"></div>
+            
+            <br />
+            
+            <div><b>Criminal charge :</b> <span id="criminalCharge"><i>Undetermined</i></span></div>
+            <div><b>Conviction penalty :</b> <span id="convictionPenalty"><i>Undetermined</i></span></div>
+            <div><b>Motive :</b> <span id="motive"><i>Undetermined</i></span></div>
+            <div><b>Apprehended date :</b> <span id="apprehended"><i>Undetermined</i></span></div>
+            <div><b>Victims :</b> <span id="victims"><i>Undetermined</i></span></div>
+            <div><b>Birthdate :</b> <span id="birthDate"><i>Undetermined</i></span></div>
+            <div><b>Birthplace :</b> <span id="birthPlace"><i>Undetermined</i></span></div>
+            <div><b>Parents :</b> <span id="parents"><i>Undetermined</i></span></div>
+            <div><b>Deathdate :</b> <span id="deathDate"><i>Undetermined</i></span></div>
+            <div><b>Deathplace :</b> <span id="deathPlace"><i>Undetermined</i></span></div>
+            <div><b>Occupation :</b> <span id="occupation"><i>Undetermined</i></span></div>
+            
+        </div>
     </div>
-    <div id="criminal_info">
-        <h1 id="label"></h1>
-        <div><b>Name : </b><span id="name"></span></div>
-        <div><b>Alias : </b><span id="alias"></span></div>
-        <div id="imageName"></div>
-        <div><b>Country :</b> <span id="country"></span></div>
-        <div id="comment"></div>
-        
-        <br />
-        
-        <div><b>Criminal charge :</b> <span id="criminalCharge"><i>Undetermined</i></span></div>
-        <div><b>Conviction penalty :</b> <span id="convictionPenalty"><i>Undetermined</i></span></div>
-        <div><b>Motive :</b> <span id="motive"><i>Undetermined</i></span></div>
-        <div><b>Apprehended date :</b> <span id="apprehended"><i>Undetermined</i></span></div>
-        <div><b>Victims :</b> <span id="victims"><i>Undetermined</i></span></div>
-        <div><b>Birthdate :</b> <span id="birthDate"><i>Undetermined</i></span></div>
-        <div><b>Birthplace :</b> <span id="birthPlace"><i>Undetermined</i></span></div>
-        <div><b>Parents :</b> <span id="parents"><i>Undetermined</i></span></div>
-        <div><b>Deathdate :</b> <span id="deathDate"><i>Undetermined</i></span></div>
-        <div><b>Deathplace :</b> <span id="deathPlace"><i>Undetermined</i></span></div>
-        <div><b>Occupation :</b> <span id="occupation"><i>Undetermined</i></span></div>
-        
-        
+    <div id="info">
         <div id="same_apprehended_year">
             Apprehended on the same year: 
             <div id="same_apprehended_year_loading">

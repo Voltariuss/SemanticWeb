@@ -196,7 +196,10 @@ function buildDOM(data) {
                 switch (fieldTypes[i]) {
                     case 'image':
                         const imgName = criminal[fields[i]][0]['value']
-                        $('#' + fields[i]).html(`<img src="https://wikipedia.org/wiki/Special:FilePath/${imgName}" title="${imgName}" alt="${imgName}" />`)
+                        $('#' + fields[i]).html(`<img src="https://wikipedia.org/wiki/Special:FilePath/${imgName}" 
+                                                        title="${imgName}" 
+                                                        alt="${imgName}" 
+                                                        class="${fields[i]}"/>`)
                         break;
                     case 'country':
                         for (let j = 0; j < criminal[fields[i]].length; ++j) {
