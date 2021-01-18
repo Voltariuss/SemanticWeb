@@ -1,4 +1,9 @@
 @font-face {
+    font-family: leorio;
+    src: url(fonts/typwrng.ttf);
+}
+
+@font-face {
     font-family: typewriter;
     src: url(fonts/typewriter.ttf);
 }
@@ -15,6 +20,12 @@
 
 body {
     background-color: #3a3939;
+}
+
+b.att {
+    font-family: leorio;
+    text-transform: uppercase;
+    font-size: 0.8em;
 }
 
 #content {
