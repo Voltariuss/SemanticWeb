@@ -32,7 +32,7 @@ const fieldTypes = [
     'str',
     'date',
     'str',
-    'str',
+    'country',
     'date',
     'resource',
     'str',
@@ -197,6 +197,22 @@ function buildDOM(data) {
                     case 'image':
                         const imgName = criminal[fields[i]][0]['value']
                         $('#' + fields[i]).html(`<img src="https://wikipedia.org/wiki/Special:FilePath/${imgName}" title="${imgName}" alt="${imgName}" />`)
+                        break;
+                    case 'country':
+                        for (let j = 0; j < criminal[fields[i]].length; ++j) {
+                            console.log(criminal[fields[i]].length);
+
+                            const countryUrl = criminal[fields[i]][j]['value'];
+                            const splitCountryUrl = countryUrl.split('/');
+                            const countryName = splitCountryUrl[splitCountryUrl.length-1];
+                            console.log(countryName);
+
+                            $('#' + fields[i]).append(`<img src="https://wikipedia.org/wiki/Special:FilePath/Flag_of_${countryName}.svg" 
+                                                            title="${countryName}" 
+                                                            alt="${countryName}" 
+                                                            height=64
+                                                            class="flag"/>`)
+                        }
                         break;
                     case 'date':
                         const date = criminal[fields[i]][0]['value'];
