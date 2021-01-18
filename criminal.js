@@ -231,7 +231,7 @@ function buildDOM(data) {
                             $('#' + fields[i]).append(`<img src="https://wikipedia.org/wiki/Special:FilePath/Flag_of_${countryName}.svg" 
                                                             title="${countryName}" 
                                                             alt="${countryName}" 
-                                                            height=32
+                                                            height=18
                                                             class="flag"/>`)
                         }
                         break;

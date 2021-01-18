@@ -50,5 +50,6 @@ b.att {
 
 .flag {
     border: 1px solid;
-    margin-right: 16px;
+    margin-left: 4px;
+    margin-right: 4px;
 }
