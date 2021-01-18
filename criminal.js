@@ -202,7 +202,7 @@ function buildDOM(data) {
                         $('#' + fields[i]).html(`<img src="https://wikipedia.org/wiki/Special:FilePath/${imgName}" 
                                                         title="${imgName}" 
                                                         alt="${imgName}" 
-                                                        class="${fields[i]} shadow rounded"/>`)
+                                                        class="${fields[i]} shadow rounded mx-auto d-block"/>`)
                         break;
                     case 'country':
                         for (let j = 0; j < criminal[fields[i]].length; ++j) {

@@ -42,15 +42,9 @@ b.att {
     border-radius: 10px;
 }
 
-#imageName {
-    margin: auto;
-    width: 256px;
-    max-width: 256px;
-}
-
 .imageName {
     max-width: 256px;
-    max-height: 512px;
+    max-height: 256px;
 }
 
 .flag {
