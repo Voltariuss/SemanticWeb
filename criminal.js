@@ -66,6 +66,9 @@ const predicates = [
 $('#criminal_info').hide();
 $('title').html(`${criminalId} - Web sémantique`);
 
+const randomAngle = (Math.random() * 4) - 2;
+$('#imageName').css('transform','rotate('+randomAngle+'deg)');
+
 const promises = predicates.map((p) => { return generateRequest(criminalURI, p) })
 Promise.all(promises)
     .then(results => {
