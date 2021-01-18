@@ -58,7 +58,7 @@ const predicates = [
     'dbpedia2:parents',
     'dbo:deathDate',
     'dbo:deathPlace',
-    'rdfs:comment',
+    'dbo:abstract',
     'dbo:occupation',
     'dbpedia2:imageName'
 ]
@@ -243,7 +243,7 @@ function buildDOM(data) {
                         $('#' + fields[i]).html(`${day}/${month}/${year}`);
                         break;
                     case 'resource':
-                        $('#' + fields[i]).html(criminal[fields[i]].map(e => getResourceIdFromUri(e['value'])).join(', '));
+                        $('#' + fields[i]).html(criminal[fields[i]].map(e => getResourceIdFromUri(e['value'])).join(' / '));
                         Promise.all(criminal[fields[i]].map(e => requestResourceLabel(e['value']))).then(labels => {
                             labels = labels.map((l, i) => {
                                 if (l['results']['bindings'].length == 0) {
@@ -252,11 +252,11 @@ function buildDOM(data) {
                                     return getResourceName(l['results']['bindings'][0], 'resource');
                                 }
                             });
-                            $('#' + fields[i]).html(labels.join(', '));
+                            $('#' + fields[i]).html(labels.join(' / '));
                         });
                         break;
                     default:
-                        $('#' + fields[i]).html(criminal[fields[i]].map(e => e['value']).join(', '));
+                        $('#' + fields[i]).html(criminal[fields[i]].map(e => e['value']).join(' / '));
                         break;
                 }
             }
