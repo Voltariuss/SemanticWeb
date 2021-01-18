@@ -1,0 +1,14 @@
+@font-face {
+    font-family: typewriter;
+    src: url(fonts/typewriter.ttf);
+}
+
+@font-face {
+    font-family: typewriter;
+    src: url(fonts/typewriter_bold.ttf);
+    font-weight: bold;
+}
+
+* {
+    font-family: typewriter;
+}
