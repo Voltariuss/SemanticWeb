@@ -43,6 +43,10 @@ b.att {
     position: relative;
 }
 
+#alias {
+    text-decoration: underline;
+}
+
 .imageName {
     max-width: 256px;
     max-height: 256px;

@@ -58,7 +58,7 @@ const predicates = [
     'dbpedia2:parents',
     'dbo:deathDate',
     'dbo:deathPlace',
-    'dbo:abstract',
+    'rdfs:comment',
     'dbo:occupation',
     'dbpedia2:imageName'
 ]
@@ -95,10 +95,10 @@ Promise.all(promises)
 
 
 function getResourceName(resource, def) {
-    if (resource['label']) {
-        return resource['label']['value'];
-    } else if (resource['name']) {
+    if (resource['name']) {
         return resource['name']['value'];
+    } else if (resource['label']) {
+        return resource['label']['value'];
     } else {
         return resource[def]['value'];
     }
@@ -125,11 +125,16 @@ function showSameApprehendedYear(criminal) {
 
 
 function showSameConvictionPenalty(criminal) {
-    requestSameURI('dbo:convictionPenalty', criminal.convictionPenalty[0]['value'], criminalURI).done((other) => {
+    const promises = criminal.convictionPenalty
+        .map(charge => requestSameURI('dbo:convictionPenalty', charge['value'], criminalURI));
+
+    Promise.all(promises).then(data => {
         let str = '<ul>';
-        for (let c of other['results']['bindings']) {
-            const target = getResourceIdFromUri(c['criminal']['value']);
-            str += '<li><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a></li>';
+        for (let d of data) {
+            for (let c of d['results']['bindings']) {
+                const target = getResourceIdFromUri(c['criminal']['value']);
+                str += '<li><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a></li>';
+            }
         }
         str += '</ul>';
         $('#same_conviction_penalty_list').append(str);
@@ -296,6 +301,14 @@ function buildDOM(data) {
         $('title').html(`${criminal.label[0]['value']} - Web sémantique`);
     } else if (criminal.name.length > 0) {
         $('title').html(`${criminal.name[0]['value']} - Web sémantique`);
+    }
+
+    if (criminal.name.length > 0) {
+        $('#criminal_name').html(criminal.name[0]['value']);
+    } else if (criminal.label.length > 0) {
+        $('#criminal_name').html(criminal.label[0]['value']);
+    } else {
+        $('#criminal_name').html(criminalId);
     }
 
     console.log(criminal);
