@@ -46,6 +46,11 @@ b.att {
     z-index: 1;
 }
 
+.criminal_charge_description {
+    font-size: 13px;
+    color: rgb(65, 65, 65);
+}
+
 #alias {
     text-decoration: underline;
 }
