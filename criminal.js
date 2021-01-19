@@ -75,6 +75,16 @@ $('.def_blocks').each((i, o) => {
     o.innerHTML = '█'.repeat(Math.floor(Math.random() * 5) + 10);
 });
 
+$('.collapse-div').each(function () {
+    const target = $(this).attr('data-target');
+    $('#' + target).hide();
+})
+
+$('.collapse-div').click(function () {
+    const target = $(this).attr('data-target');
+    $('#' + target).slideToggle();
+});
+
 const promises = predicates.map((p) => { return generateRequest(criminalURI, p) })
 Promise.all(promises)
     .then(results => {

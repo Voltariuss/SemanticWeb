@@ -68,6 +68,7 @@ b.att {
 }
 
 .post-it {
+    background-blend-mode: multiply;
     background: url(images/Old-Paper-Texture-3.jpg);
     box-shadow: 3px 3px 4px 1px #000;
     transition: all  0.2s;
@@ -80,5 +81,13 @@ b.att {
 }
 
 .post-it .post-it-name {
-    color: red;
+    color:  #831d27;
+}
+
+.collapse-div {
+    cursor: pointer;
+}
+
+.collapse-div:hover {
+    text-decoration: underline;
 }
