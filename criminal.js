@@ -116,6 +116,7 @@ function generateStr(criminals) {
         return a['criminal']['value'] > b['criminal']['value'];
     })
 
+        return criminals.indexOf(item) == pos;
     let str = '<div class="container"><div class="row">';
     for (let c of criminals) {
         const target = getResourceIdFromUri(c['criminal']['value']);
@@ -215,9 +216,9 @@ function buildDOM(data) {
                 criminal[fields[i]].push(bindings[j]['value']);
             }
 
-            // Suppression des lignes non anglaises
+            // Suppression des lignes vides et/ou non anglaises
             criminal[fields[i]] = criminal[fields[i]].filter(item => {
-                return item['xml:lang'] === undefined || item['xml:lang'] == 'en';
+                return item['value'] != '' && (item['xml:lang'] === undefined || item['xml:lang'] == 'en');
             });
 
             // Si l'API a retourné une ligne anglaise
@@ -316,8 +317,6 @@ function buildDOM(data) {
     } else {
         $('#criminal_name').html(criminalId);
     }
-
-    console.log(criminal);
 
 }
 
