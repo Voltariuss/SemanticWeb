@@ -67,9 +67,11 @@ $('#criminal_info').hide();
 $('title').html(`${criminalId} - Web sémantique`);
 
 const randomAngle = (Math.random() * 6) - 3;
-const randomAngleContent = (Math.random() * 2) - 1;
 $('#imageName').css('transform','rotate('+randomAngle+'deg)');
-$('#criminal_info').css('transform','rotate('+randomAngleContent+'deg)');
+$('.paper').each((i, o) => {
+    $(o).css('transform','rotate('+((Math.random() * 2) - 1)+'deg)');
+});
+
 $('.def_blocks').each((i, o) => {
     o.innerHTML = '█'.repeat(Math.floor(Math.random() * 5) + 10);
 });
@@ -109,14 +111,24 @@ function getResourceIdFromUri(uri) {
     return splitUri[splitUri.length - 1];
 }
 
+function generateStr(criminals) {
+    criminals.sort((a, b) => {
+        return a['criminal']['value'] > b['criminal']['value'];
+    })
+
+    let str = '<div class="container"><div class="row">';
+    for (let c of criminals) {
+        const target = getResourceIdFromUri(c['criminal']['value']);
+        str += '<div class="col-4"><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a></div>';
+    }
+    str += '</div>';
+
+    return str;
+}
+
 function showSameApprehendedYear(criminal) {
     requestSameYear('dbo:apprehended', criminal.apprehended[0]['value'].split('-')[0], criminalURI).done((other) => {
-        let str = '<ul>';
-        for (let c of other['results']['bindings']) {
-            const target = getResourceIdFromUri(c['criminal']['value']);
-            str += '<li><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a></li>';
-        }
-        str += '</ul>';
+        const str = generateStr(other['results']['bindings']);
         $('#same_apprehended_year_list').append(str);
         $('#same_apprehended_year').show();
         $('#same_apprehended_year_loading').hide();
@@ -129,14 +141,8 @@ function showSameConvictionPenalty(criminal) {
         .map(charge => requestSameURI('dbo:convictionPenalty', charge['value'], criminalURI));
 
     Promise.all(promises).then(data => {
-        let str = '<ul>';
-        for (let d of data) {
-            for (let c of d['results']['bindings']) {
-                const target = getResourceIdFromUri(c['criminal']['value']);
-                str += '<li><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a></li>';
-            }
-        }
-        str += '</ul>';
+        const str = generateStr(data.map(d => d['results']['bindings']).flat());
+
         $('#same_conviction_penalty_list').append(str);
         $('#same_conviction_penalty').show();
         $('#same_conviction_penalty_loading').hide();
