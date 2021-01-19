@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="criminal.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"
+        integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf"
+        crossorigin="anonymous"></script>
+    <title>Web sémantique - Criminels</title>
+</head>
+
+<body class="p-4">
+    <div id="criminal_info_loading">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <div id="criminal_info" class="paper">
+        <div id="country" class="text-right"></div>
+        <h1 id="criminal_name"></h1>
+        <div id="imageName">
+            <img src="images/placeholder_mugshot.png" class="imageName shadow rounded mx-auto d-block"/>
+        </div>
+        <div id="alias" class="text-center my-2"></div>
+        <br />
+        <div id="comment"></div>
+        <br />
+
+        <div><b class="att">Criminal charge:</b> <span id="criminalCharge" class="def_blocks"></span></div>
+        <div><b class="att">Conviction penalty:</b> <span id="convictionPenalty" class="def_blocks"></span></div>
+        <div><b class="att">Motive:</b> <span id="motive" class="def_blocks"></span></div>
+        <div><b class="att">Apprehended date:</b> <span id="apprehended" class="def_blocks"></span></div>
+        <div><b class="att">Victims:</b> <span id="victims" class="def_blocks"></span></div>
+        <div><b class="att">Birthdate:</b> <span id="birthDate" class="def_blocks"></span></div>
+        <div><b class="att">Birthplace:</b> <span id="birthPlace" class="def_blocks"></span></div>
+        <div><b class="att">Parents:</b> <span id="parents" class="def_blocks"></span></div>
+        <div><b class="att">Deathdate:</b> <span id="deathDate" class="def_blocks"></span></div>
+        <div><b class="att">Deathplace:</b> <span id="deathPlace" class="def_blocks"></span></div>
+        <div><b class="att">Occupation:</b> <span id="occupation" class="def_blocks"></span></div>
+
+    </div>
+    <div id="info" class="paper">
+        <div id="same_apprehended_year">
+            Apprehended on the same year:
+            <div id="same_apprehended_year_loading">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="same_apprehended_year_list"></div>
+        </div>
+
+
+        <div id="same_conviction_penalty">
+            Criminal with the same conviction penalty:
+            <div id="same_conviction_penalty_loading">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="same_conviction_penalty_list"></div>
+        </div>
+
+
+        <div id="similar_criminal_charge">
+            Criminal with similar criminal charge:
+            <div id="similar_criminal_charge_loading">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="similar_criminal_charge_list"></div>
+        </div>
+
+        <div id="similar_motive">
+            Criminal with similar motive:
+            <div id="similar_motive_loading">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div id="similar_motive_list"></div>
+        </div>
+    </div>
+</body>
+
+<script src="./script.js"></script>
+<script src="./criminal.js"></script>
+
+</html>

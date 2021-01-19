@@ -1,0 +1,65 @@
+@font-face {
+    font-family: leorio;
+    src: url(fonts/typwrng.ttf);
+}
+
+@font-face {
+    font-family: typewriter;
+    src: url(fonts/typewriter.ttf);
+}
+
+@font-face {
+    font-family: typewriter;
+    src: url(fonts/typewriter_bold.ttf);
+    font-weight: bold;
+}
+
+* {
+    font-family: typewriter;
+}
+
+body {
+    background-color: #3a3939;
+}
+
+b.att {
+    font-family: leorio;
+    text-transform: uppercase;
+    font-size: 0.8em;
+}
+
+.paper {
+    background: repeat-y url("images/Old-Paper-Texture-3.jpg");
+    background-size: 100%;
+    margin: auto;
+    width: 750px;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    box-shadow: 0px 0px 22px 7px rgba(112,111,111,0.92);
+    border-radius: 10px;
+    position: relative;
+}
+
+#criminal_info {
+    z-index: 1;
+}
+
+#info {
+}
+
+#alias {
+    text-decoration: underline;
+}
+
+.imageName {
+    max-width: 256px;
+    max-height: 256px;
+}
+
+.flag {
+    border: 1px solid;
+    margin-left: 4px;
+    margin-right: 4px;
+}
