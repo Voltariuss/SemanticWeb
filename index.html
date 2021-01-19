@@ -7,87 +7,92 @@
     <title>Web sémantique - Criminels</title>
   </head>
   <body class="p-4">
+
     <header class="container-fluid">
+
       <div class="row">
         <h1 class="text-center">Web sémantique - Criminels</h1>
       </div>
-      <form class="row" id="filters">
-        <fieldset class="container">
-          <legend>Filtres</legend>
-          <div class="row">
-            <label for="formName" class="form-label">Nom</label>
-            <div>
-              <input type="text" class="form-control" id="formName">
-            </div>
-          </div>
-          <div class="row">
-            <label for="formAlias" class="form-label mt-3">Alias</label>
-            <div>
-              <input type="text" class="form-control" id="formAlias">
-            </div>
-          </div>
-          <div class="row">
-            <label for="formCriminalCharge" class="form-label mt-3">Charge criminelle</label>
-            <div>
-              <input type="text" class="form-control" id="formCriminalCharge">
-            </div>
-          </div>
-          <div class="row">
-            <label for="formConvictionPenalty" class="form-label mt-3">Condamnation</label>
-            <div>
-              <input type="text" class="form-control" id="formConvictionPenalty">
-            </div>
-          </div>
-          <div class="row">
-            <label for="formMotive" class="form-label mt-3">Motif</label>
-            <div>
-              <input type="text" class="form-control" id="formMotive">
-            </div>
-          </div>
-          <div class="row">
-            <label for="filter-6" class="form-label mt-3">Date d'arrestation</label>
-            <div class="container-fluid">
-              <div class="row justify-content-between">
-                <span class="col">
-                  <label for="formApprenhendedBegin" class="form-label">Date de début</label>
-                  <input type="date" class="form-control" id="formApprenhendedBegin">
-                </span>
-                <span class="col">
-                  <label for="formApprenhendedEnd" class="form-label">Date de fin</label>
-                  <input type="date" class="form-control col-2" id="formApprenhendedEnd">
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <label for="filter-7" class="form-label mt-3">Nombre de victimes</label>
-            <div class="container-fluid">
-              <div class="row justify-content-between">
-                <span class="col">
-                  <label for="formVictimsMin" class="form-label">Min</label>
-                  <input type="number" class="form-control" id="formVictimsMin">
-                </span>
-                <span class="col">
-                  <label for="formVictimsMax" class="form-label">Max</label>
-                  <input type="number" class="form-control col-2" id="formVictimsMax">
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <label for="formCountry" class="form-label mt-3">Pays</label>
-            <div>
-              <input type="text" class="form-control" id="formCountry">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col text-center mt-3">
-              <button id="submit" class="btn btn-primary mb-3" onclick="onSubmitFilters">Rechercher</button>
-            </div>
-          </div>
-        </fieldset>
-      </form>
+
     </header>
+
+    <form class="row" id="filters">
+      <fieldset class="container">
+        <legend>Filtres</legend>
+        <div class="row">
+          <label for="formName" class="form-label">Nom</label>
+          <div>
+            <input type="text" class="form-control" id="formName">
+          </div>
+        </div>
+        <div class="row">
+          <label for="formAlias" class="form-label mt-3">Alias</label>
+          <div>
+            <input type="text" class="form-control" id="formAlias">
+          </div>
+        </div>
+        <div class="row">
+          <label for="formCriminalCharge" class="form-label mt-3">Charge criminelle</label>
+          <div>
+            <input type="text" class="form-control" id="formCriminalCharge">
+          </div>
+        </div>
+        <div class="row">
+          <label for="formConvictionPenalty" class="form-label mt-3">Condamnation</label>
+          <div>
+            <input type="text" class="form-control" id="formConvictionPenalty">
+          </div>
+        </div>
+        <div class="row">
+          <label for="formMotive" class="form-label mt-3">Motif</label>
+          <div>
+            <input type="text" class="form-control" id="formMotive">
+          </div>
+        </div>
+        <div class="row">
+          <label for="filter-6" class="form-label mt-3">Date d'arrestation</label>
+          <div class="container-fluid">
+            <div class="row justify-content-between">
+              <span class="col">
+                <label for="formApprenhendedBegin" class="form-label">Date de début</label>
+                <input type="date" class="form-control" id="formApprenhendedBegin">
+              </span>
+              <span class="col">
+                <label for="formApprenhendedEnd" class="form-label">Date de fin</label>
+                <input type="date" class="form-control col-2" id="formApprenhendedEnd">
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label for="filter-7" class="form-label mt-3">Nombre de victimes</label>
+          <div class="container-fluid">
+            <div class="row justify-content-between">
+              <span class="col">
+                <label for="formVictimsMin" class="form-label">Min</label>
+                <input type="number" class="form-control" id="formVictimsMin">
+              </span>
+              <span class="col">
+                <label for="formVictimsMax" class="form-label">Max</label>
+                <input type="number" class="form-control col-2" id="formVictimsMax">
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label for="formCountry" class="form-label mt-3">Pays</label>
+          <div>
+            <select class="form-select" id="formCountry"></select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-center mt-3">
+            <button id="submit" class="btn btn-primary mb-3" onclick="onSubmitFilters">Rechercher</button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+
     <footer class="container-fluid mt-3">
       <p class="text-center">@Copyright de folie - 2021</p>
     </footer>
@@ -95,5 +100,6 @@
     <script src="./jquery.js" type="text/javascript"></script>
     <script src="./jquery-dateformat.js" type="text/javascript"></script>
     <script src="./script.js" type="text/javascript"></script>
+
   </body>
 </html>
