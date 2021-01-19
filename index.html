@@ -82,7 +82,9 @@
         <div class="row">
           <label for="formCountry" class="form-label mt-3">Pays</label>
           <div>
-            <select class="form-select" id="formCountry"></select>
+            <select class="form-select" id="formCountry">
+              <option value="">-</option>
+            </select>
           </div>
         </div>
         <div class="row">
@@ -92,6 +94,8 @@
         </div>
       </fieldset>
     </form>
+
+    <div id="searchResults" class="container"></div>
 
     <footer class="container-fluid mt-3">
       <p class="text-center">@Copyright de folie - 2021</p>

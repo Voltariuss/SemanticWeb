@@ -53,7 +53,21 @@ function onSubmitFilters(e) {
 
   e.preventDefault();
 
-  dbPediaRequest(mdx, data => console.log(data));
+  dbPediaRequest(mdx, data => {
+
+    let json = data.results.bindings;
+
+    $('#searchResults').html(`${
+      Object.values(json).map(result => `
+        <div>
+          <span>Nom : </span>${ result.n.value } -
+          <span>Pseudonyme : </span>${ result.a.value } -
+          <span>Description : </span>${ result.com.value }
+        </div>
+      `).join('')
+    }`);
+
+  });
 
 }
 
