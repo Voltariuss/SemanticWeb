@@ -111,7 +111,7 @@ function getResourceIdFromUri(uri) {
     return splitUri[splitUri.length - 1];
 }
 
-function generateStr(criminals) {
+function generateTableDisplay(criminals) {
     criminals.sort((a, b) => {
         return a['criminal']['value'] > b['criminal']['value'];
     })
@@ -130,9 +130,22 @@ function generateStr(criminals) {
     return str;
 }
 
+function generateListDisplay(pieces) {
+    let str = '<ul>';
+    for (let piece of pieces) {
+        for (let c of piece['results']['bindings']) {
+            const target = getResourceIdFromUri(c['criminal']['value']);
+            str += '<li><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a><div class="criminal_charge_description">(' + c['value']['value'] + ')</div></li>';
+        }
+    }
+    str += '</ul>';
+
+    return str;
+}
+
 function showSameApprehendedYear(criminal) {
     requestSameYear('dbo:apprehended', criminal.apprehended[0]['value'].split('-')[0], criminalURI).done((other) => {
-        const str = generateStr(other['results']['bindings']);
+        const str = generateTableDisplay(other['results']['bindings']);
         $('#same_apprehended_year_list').append(str);
         $('#same_apprehended_year').show();
         $('#same_apprehended_year_loading').hide();
@@ -145,7 +158,7 @@ function showSameConvictionPenalty(criminal) {
         .map(charge => requestSameURI('dbo:convictionPenalty', charge['value'], criminalURI));
 
     Promise.all(promises).then(data => {
-        const str = generateStr(data.map(d => d['results']['bindings']).flat());
+        const str = generateTableDisplay(data.map(d => d['results']['bindings']).flat());
 
         $('#same_conviction_penalty_list').append(str);
         $('#same_conviction_penalty').show();
@@ -154,7 +167,6 @@ function showSameConvictionPenalty(criminal) {
 }
 
 function showSimilarCriminalCharge(criminal) {
-    let str = '<ul>';
 
     const promises = criminal.criminalCharge[0]['value'].split(/[;.,()]/)
         .map(s => s.trim())
@@ -166,13 +178,7 @@ function showSimilarCriminalCharge(criminal) {
 
     Promise.all(promises).then(pieces => {
 
-        for (let piece of pieces) {
-            for (let c of piece['results']['bindings']) {
-                const target = getResourceIdFromUri(c['criminal']['value']);
-                str += '<li><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a> <div class="criminal_charge_description">(' + c['value']['value'] + ')</div></li>';
-            }
-        }
-        str += '</ul>';
+        const str = generateListDisplay(pieces);
 
         $('#similar_criminal_charge_list').append(str);
         $('#similar_criminal_charge').show();
@@ -182,8 +188,6 @@ function showSimilarCriminalCharge(criminal) {
 }
 
 function showSimilarMotive(criminal) {
-    let str = '<ul>';
-
     const promises = criminal.motive[0]['value'].split(/[;.,()]/)
         .map(s => s.trim())
         .filter(s => s.length > 0)
@@ -192,13 +196,7 @@ function showSimilarMotive(criminal) {
         });
 
     Promise.all(promises).then(pieces => {
-        for (let piece of pieces) {
-            for (let c of piece['results']['bindings']) {
-                const target = getResourceIdFromUri(c['criminal']['value']);
-                str += '<li><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a> (' + c['value']['value'] + ') </li>';
-            }
-        }
-        str += '</ul>';
+        const str = generateListDisplay(pieces);
         $('#similar_motive_list').append(str);
         $('#similar_motive').show();
         $('#similar_motive_loading').hide();
