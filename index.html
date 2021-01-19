@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link src="./jquery-ui.min.css" rel="stylesheet">
     <title>Web sémantique - Criminels</title>
   </head>
   <body class="p-4">
@@ -34,19 +35,19 @@
         <div class="row">
           <label for="formCriminalCharge" class="form-label mt-3">Charge criminelle</label>
           <div>
-            <input type="text" class="form-control" id="formCriminalCharge">
+            <input type="text" class="form-control autocomplete" id="formCriminalCharge">
           </div>
         </div>
         <div class="row">
           <label for="formConvictionPenalty" class="form-label mt-3">Condamnation</label>
           <div>
-            <input type="text" class="form-control" id="formConvictionPenalty">
+            <input type="text" class="form-control autocomplete" id="formConvictionPenalty">
           </div>
         </div>
         <div class="row">
-          <label for="formMotive" class="form-label mt-3">Motif</label>
+          <label for="formMotive" class="form-label mt-3">Motif de condamnation</label>
           <div>
-            <input type="text" class="form-control" id="formMotive">
+            <input type="text" class="form-control autocomplete" id="formMotive">
           </div>
         </div>
         <div class="row">
@@ -102,6 +103,7 @@
     </footer>
 
     <script src="./jquery.js" type="text/javascript"></script>
+    <script src="./jquery-ui.min.js" type="text/javascript"></script>
     <script src="./jquery-dateformat.js" type="text/javascript"></script>
     <script src="./script.js" type="text/javascript"></script>
 

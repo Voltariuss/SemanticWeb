@@ -1,22 +1,47 @@
 const prefixes = {
+
   'rdfs:': '<http://www.w3.org/2000/01/rdf-schema#>',
   'foaf:': '<http://xmlns.com/foaf/0.1/>',
   'dbpedia2:': '<http://dbpedia.org/property/>',
   'criminal:': '<http://dbpedia.org/ontology/Criminal>'
+
 };
 
 const filters = {
-  formName: { filter: 'FILTER(contains(lcase(str(?n)), lcase(str("%"))))' },
-  formAlias: { filter: 'FILTER(contains(lcase(str(?a)), lcase(str("%"))))' },
-  formCriminalCharge: { variable: 'dbo:criminalCharge ?cc', filter: 'FILTER(contains(lcase(str(?cc)), lcase(str("%"))))' },
-  formConvictionPenalty: { variable: 'dbo:convictionPenalty ?cp', filter: 'FILTER(contains(lcase(str(?cp)), lcase(str("%"))))' },
-  formMotive: { variable: 'dbo:motive ?m', filter: 'FILTER(contains(lcase(str(?m)), lcase(str("%"))))' },
-  formApprenhendedBegin: { variable: 'dbpedia2:apprehended ?d', filter: 'FILTER(?d >= "%d"^^xsd:date)' },
-  formApprenhendedEnd: { variable: 'dbpedia2:apprehended ?d', filter: 'FILTER(?d <= "%d"^^xsd:date)' },
-  formVictimsMin: { variable: 'dbpedia2:victims ?v', filter: 'FILTER(xsd:integer(?v) >= %)' },
-  formVictimsMax: { variable: 'dbpedia2:victims ?v', filter: 'FILTER(xsd:integer(?v) <= %)' },
-  formCountry: { variable: 'dbo:country ?cnt', filter: 'FILTER(?cnt = <%>)' }
+
+  contains: { string: 'FILTER(contains(lcase(str(%v)), lcase(str("%"))))' },
+  inferiorOrEqual: {
+    date: 'FILTER(%v >= "%d"^^xsd:date)',
+    integer: 'FILTER(xsd:integer(%v) >= %)'
+  },
+
+  superiorOrEqual: {
+    date: 'FILTER(%v <= "%d"^^xsd:date)',
+    integer: 'FILTER(xsd:integer(%v) <= %)'
+  },
+
+  equal: { string: 'FILTER(%v = %)' }
+
 }
+
+const inputs = {
+
+  formName: { variable: '?n', source: 'foaf:name', filter: filters.contains.string },
+  formAlias: { variable: '?a', source: 'dbpedia2:alias', filter: filters.contains.string },
+  formCriminalCharge: { variable: '?cc', source: 'dbo:criminalCharge', filter: filters.contains.string },
+  formConvictionPenalty: { variable: '?cp', source: 'dbo:convictionPenalty', subProperty: {
+    variable: '?l', source: 'rdfs:label', filter: filters.contains.string
+  } },
+  formMotive: { variable: '?m', source: 'dbo:motive', filter: filters.contains.string },
+  formApprenhendedBegin: { variable: '?d', source: 'dbpedia2:apprehended', filter: filters.inferiorOrEqual.date },
+  formApprenhendedEnd: { variable: '?d', source: 'dbpedia2:apprehended', filter: filters.superiorOrEqual.date },
+  formVictimsMin: { variable: '?v', source: 'dbpedia2:victims', filter: filters.inferiorOrEqual.integer },
+  formVictimsMax: { variable: '?v', source: 'dbpedia2:victims', filter: filters.superiorOrEqual.integer },
+  formCountry: { variable: '?cnt', source: 'dbo:country', filter: filters.equal.string }
+
+}
+
+const langFilter = 'FILTER(langMatches(lang(%v), "%"))';
 
 function getCountries() {
 
@@ -33,11 +58,51 @@ function getCountries() {
 
     $('#formCountry').append(`${
       Object.values(json).map(country =>
-        `<option value="${ country.cnt.value }">${ country.cn.value.split('/').pop() }</option>`
+        `<option value="<${ country.cnt.value }>">${ country.cn.value.split('/').pop() }</option>`
       ).join('')
     }`);
 
   });
+
+}
+
+async function getAutoCompletion(object, value, response) {
+
+  let input = inputs[object.attr('id')];
+  let mdx = `${ addPrefixes() }
+
+    SELECT DISTINCT ${ buildSelectedVariable(input) } WHERE {
+      ?c a criminal: ; foaf:name ?n ; dbpedia2:alias ?a ; rdfs:comment ?com ;
+      ${ input.source } ${ input.variable } ${ buildSubProperty(input.variable, input.subProperty) }
+      ${ buildFilters(input, value) }
+    } LIMIT 100
+  `;
+
+  dbPediaRequest(mdx, data =>
+    response(Object.values(data.results.bindings).map(result =>
+      result[Object.keys(result)[0]].value
+    ))
+  );
+
+}
+
+function buildSelectedVariable(input) { return input.subProperty ? buildSelectedVariable(input.subProperty) : input.variable }
+
+function buildSubProperty(from, input) {
+
+  if(!input) { return ''; }
+
+  return `. ${ from } ${ input.source } ${ input.variable } ${ buildSubProperty(input.variable, input.subProperty) }`;
+
+}
+
+function buildFilters(input, value) {
+
+  if(!input.filter) { return buildFilters(input.subProperty, value); }
+
+  return input.filter.replace('%v', input.variable)
+                     .replace('%d', $.format.date(value, 'yyyy-MM-dd'))
+                     .replace('%', value);
 
 }
 
@@ -46,7 +111,8 @@ function onSubmitFilters(e) {
   let mdx = `${ addPrefixes() }
 
     SELECT ?n, ?a, ?com WHERE {
-      ?c a criminal: ; foaf:name ?n ; dbpedia2:alias ?a ; rdfs:comment ?com ${ addVariables() }
+      ?c a criminal: ; foaf:name ?n ; dbpedia2:alias ?a ; rdfs:comment ?com
+      ${ addVariables('?c') }
       ${ addFilters() }
     } LIMIT 100
   `;
@@ -77,40 +143,34 @@ function addPrefixes() {
 
 }
 
-function addVariables() {
+function addVariables(mainVariable) {
 
   let usedVariables = [];
-  let variables = Object.entries(filters).map(([inputName, filterOptions]) => {
+  let variables = Object.entries(inputs).map(([inputName, input]) => {
 
-    let variable = filterOptions['variable'];
-    let inputValue = $(`#${ inputName }`).val();
+    let value = $(`#${ inputName }`).val();
 
-    if(!variable || !inputValue || usedVariables.includes(variable))
-    { return; }
+    if(!input.variable || !value || usedVariables.includes(input.variable)) { return; }
 
-    usedVariables.push(variable);
+    usedVariables.push(input.variable);
 
-    return variable;
+    return `${ mainVariable } ${ input.source } ${ input.variable } ${ buildSubProperty(input.variable, input.subProperty) }`;
 
-  }).filter(value => value).join(' ; ');
+  }).filter(value => value).join(' . ');
 
-  return variables ? ` ; ${ variables }` : '';
+  return variables ? `. ${ variables }` : '';
 
 }
 
 function addFilters() {
 
-  return Object.entries(filters).map(([inputName, filterOptions]) => {
+  return Object.entries(inputs).map(([inputName, input]) => {
 
-    let filter = filterOptions.filter;
-    let inputValue = $(`#${ inputName }`).val();
+    let value = $(`#${ inputName }`).val();
 
-    if(!inputValue) { return; }
+    if(!value) { return; }
 
-    filter = filter.replace('%d', $.format.date(inputValue, 'yyyy-MM-dd'));
-    filter = filter.replace('%', inputValue);
-
-    return filter;
+    return buildFilters(input, value);
 
   }).join(' ');
 
@@ -130,5 +190,9 @@ $(document).ready(() => {
   $('#submit').click(onSubmitFilters);
 
   getCountries();
+
+  $('.autocomplete').autocomplete({
+    source: (value, response) => getAutoCompletion($(':focus'), value.term, response)
+  });
 
 });
