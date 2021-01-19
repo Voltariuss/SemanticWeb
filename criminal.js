@@ -115,9 +115,9 @@ Promise.all(promises)
 
 
 function getResourceName(resource, def) {
-    if (resource['name']) {
+    if (resource['name'] && resource['name']['value']) {
         return resource['name']['value'];
-    } else if (resource['label']) {
+    } else if (resource['label']  && resource['label']['value']) {
         return resource['label']['value'];
     } else {
         const splitUrl = resource[def]['value'].split('/')
