@@ -4,7 +4,7 @@ const searchRequest = `
   SELECT * WHERE {
     ?criminal a criminal:
   }
-  LIMIT 200
+  LIMIT 20
 `;
 
 const predicates = [
@@ -37,6 +37,7 @@ function appendSearchResult(searchResult, result) {
   setCountryFlag(component, result);
   setCriminalCharge(component, result);
   component.removeClass('d-none');
+  $('#spinner').addClass('d-none');
   component.on('click', function () {
     window.location.href = 'criminal.html?id=' + resourceId
   });
