@@ -63,7 +63,7 @@ const predicates = [
     'dbpedia2:imageName'
 ]
 
-$('#criminal_info').hide();
+$('#criminal_info_block').hide();
 $('title').html(`${criminalId} - Web sémantique`);
 
 $('#imageName').css('transform', 'rotate(' + ((Math.random() * 6) - 3) + 'deg)');
@@ -82,14 +82,24 @@ $('.collapse-div').each(function () {
 
 $('.collapse-div').click(function () {
     const target = $(this).attr('data-target');
+
+    if ($('#' + target).css('display') === 'none') {
+        $(this).find('.collapse-caret').css('transform', 'rotate(180deg)');
+    } else {
+        $(this).find('.collapse-caret').css('transform', 'rotate(0deg)');
+    }
+
     $('#' + target).slideToggle();
+    
+    
 });
 
 const promises = predicates.map((p) => { return generateRequest(criminalURI, p) })
 Promise.all(promises)
     .then(results => {
         // animation to show the criminal card
-        $('#criminal_info').show();
+        $('#criminal_info_block').show();
+        $('#criminal_info_loading').hide();
         $('#criminal_info').css('opacity', '0');
         $('#criminal_info').css('bottom', '-200px');
         $('#criminal_info').animate({
@@ -98,7 +108,6 @@ Promise.all(promises)
         }, {
             easing: 'swing'
         });
-        $('#criminal_info_loading').hide();
 
         // build dom
         buildDOM(results);
@@ -136,7 +145,7 @@ function generateTableDisplay(criminals) {
         const randAngle = Math.random() * 4 - 2;
         const randTransX = Math.random() * 20 - 10;
         const randTransY = Math.random() * 10 - 5;
-        str += '<div class="col-4 text-center my-2" style="transform: rotate(' + randAngle + 'deg) translate(' + randTransX + 'px, ' + randTransY + 'px);"><div class="post-it p-2" onClick="redirectToCriminal(\''+target+'\')"><div class="post-it-name">' + getResourceName(c, 'criminal') + '</div></div></div>';
+        str += '<div class="col-4 text-center my-2" style="transform: rotate(' + randAngle + 'deg) translate(' + randTransX + 'px, ' + randTransY + 'px);"><a href="criminal.html?id='+target+'"><div class="post-it p-2"><div class="post-it-name">' + getResourceName(c, 'criminal') + '</div></div></a></div>';
     }
     str += '</div>';
 
@@ -156,7 +165,7 @@ function generateListDisplay(pieces) {
 
             const randTransX = Math.random() * 20 - 10;
             const randTransY = Math.random() * 10 - 5;
-            str += '<div class="col-4 text-center my-2" style="transform: rotate(' + randAngle + 'deg) translate(' + randTransX + 'px, ' + randTransY + 'px);"><div class="post-it p-2" onClick="redirectToCriminal(\''+target+'\')"><div class="post-it-name">' + getResourceName(c, 'criminal') + '</div><div class="criminal_charge_description">(' + c['value']['value'] + ')</div></div></div>';
+            str += '<div class="col-4 text-center my-2" style="transform: rotate(' + randAngle + 'deg) translate(' + randTransX + 'px, ' + randTransY + 'px);"><a href="criminal.html?id='+target+'"><div class="post-it p-2"><div class="post-it-name">' + getResourceName(c, 'criminal') + '</div><div class="criminal_charge_description">(' + c['value']['value'] + ')</div></div></a></div>';
         }
     }
     str += '</div></div>';
