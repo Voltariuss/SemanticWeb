@@ -68,8 +68,10 @@ $('title').html(`${criminalId} - Web sémantique`);
 
 const randomAngle = (Math.random() * 6) - 3;
 $('#imageName').css('transform','rotate('+randomAngle+'deg)');
+$('#imageName').css('transform','rotate('+((Math.random() * 6) - 3)+'deg)');
 $('.paper').each((i, o) => {
     $(o).css('transform','rotate('+((Math.random() * 2) - 1)+'deg)');
+    $(o).css('transform','rotate('+((Math.random() * 1.5) - 0.75)+'deg)');
 });
 
 $('.def_blocks').each((i, o) => {
@@ -116,7 +118,10 @@ function generateStr(criminals) {
         return a['criminal']['value'] > b['criminal']['value'];
     })
 
+    criminals.filter((item, pos) => {
         return criminals.indexOf(item) == pos;
+    })
+
     let str = '<div class="container"><div class="row">';
     for (let c of criminals) {
         const target = getResourceIdFromUri(c['criminal']['value']);
