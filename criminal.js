@@ -101,7 +101,8 @@ function getResourceName(resource, def) {
     } else if (resource['label']) {
         return resource['label']['value'];
     } else {
-        return resource[def]['value'];
+        const splitUrl = resource[def]['value'].split('/')
+        return splitUrl[splitUrl.length-1];
     }
 }
 
