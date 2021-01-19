@@ -166,10 +166,11 @@ function showSimilarCriminalCharge(criminal) {
         for (let piece of pieces) {
             for (let c of piece['results']['bindings']) {
                 const target = getResourceIdFromUri(c['criminal']['value']);
-                str += '<li><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a> (' + c['value']['value'] + ') </li>';
+                str += '<li><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a> <div class="criminal_charge_description">(' + c['value']['value'] + ')</div></li>';
             }
         }
         str += '</ul>';
+
         $('#similar_criminal_charge_list').append(str);
         $('#similar_criminal_charge').show();
         $('#similar_criminal_charge_loading').hide();
