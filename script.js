@@ -1,7 +1,5 @@
 function onSubmitFilters() {
-    generateRequest('John_Anthony_Walker','foaf:name').done((data) => {
-        console.log(data);
-    });
+    
 }
 
 function dbPediaRequest (sparqlRequest) {
