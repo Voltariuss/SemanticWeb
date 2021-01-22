@@ -5,7 +5,7 @@ function onSubmitFilters() {
 }
 
 function dbPediaRequest (sparqlRequest) {
-  return $.get('http://dbpedia.org/sparql', {
+  return $.get('https://dbpedia.org/sparql', {
     query: sparqlRequest,
     output: 'json'
   });
