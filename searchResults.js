@@ -125,7 +125,7 @@ function setCriminalCharge(component, result) {
     var trimmedString = criminalCharge.length > length ? 
                         criminalCharge.substring(0, length - 3) + '...' : 
                         criminalCharge;
-    component.find('.criminal-charge').append('Poursuites pénales : ' + trimmedString);
+    component.find('.criminal-charge').append('Criminal charges : ' + trimmedString);
   }
 }
 
