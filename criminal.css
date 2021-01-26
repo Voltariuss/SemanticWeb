@@ -1,0 +1,93 @@
+@font-face {
+    font-family: leorio;
+    src: url(fonts/typwrng.ttf);
+}
+
+@font-face {
+    font-family: typewriter;
+    src: url(fonts/typewriter.ttf);
+}
+
+@font-face {
+    font-family: typewriter;
+    src: url(fonts/typewriter_bold.ttf);
+    font-weight: bold;
+}
+
+* {
+    font-family: typewriter;
+}
+
+body {
+    /* background-color: #3a3939; */
+    background: url('images/tekstura-fon-uzor.jpg');
+}
+
+b.att {
+    font-family: leorio;
+    text-transform: uppercase;
+    font-size: 0.8em;
+}
+
+.paper {
+    background: repeat-y url("images/Old-Paper-Texture-3.jpg");
+    background-size: 100%;
+    margin: auto;
+    width: 750px;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    box-shadow: 0px 0px 22px 7px rgba(112,111,111,0.92);
+    border-radius: 10px;
+    position: relative;
+}
+
+#criminal_info {
+    z-index: 1;
+}
+
+.criminal_charge_description {
+    font-size: 0.6em;
+    color: rgb(65, 65, 65);
+}
+
+#alias {
+    text-decoration: underline;
+}
+
+.imageName {
+    max-width: 256px;
+    max-height: 256px;
+}
+
+.flag {
+    border: 1px solid;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.post-it {
+    background-blend-mode: multiply;
+    background: url(images/Old-Paper-Texture-3.jpg);
+    box-shadow: 3px 3px 4px 1px #000;
+    transition: all  0.2s;
+}
+
+.post-it:hover {
+    cursor: pointer;
+    transform: scale(1.1, 1.1);
+    box-shadow: 4px 4px 8px 0px #000;
+}
+
+.post-it .post-it-name {
+    color:  #831d27;
+}
+
+.collapse-div {
+    cursor: pointer;
+}
+
+.collapse-div:hover {
+    text-decoration: underline;
+}
