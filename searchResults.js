@@ -17,7 +17,8 @@ const predicates = [
   'rdfs:label',
   'dbpedia2:imageName',
   'dbo:country',
-  'dbo:criminalCharge'
+  'dbo:criminalCharge',
+  'rdfs:comment'
 ];
 
 dbPediaRequest(searchRequest).then(function (data) {
@@ -49,6 +50,7 @@ function appendSearchResult(searchResult, result) {
   setImage(component, result);
   setCountryFlag(component, result);
   setCriminalCharge(component, result);
+  setComment(component, result);
   component.removeClass('d-none');
   $('#spinner').addClass('d-none');
   component.on('click', function () {
@@ -113,6 +115,17 @@ function setCriminalCharge(component, result) {
                         criminalCharge.substring(0, length - 3) + '...' : 
                         criminalCharge;
     component.find('.criminal-charge').append('Poursuites pénales : ' + trimmedString);
+  }
+}
+
+function setComment(component, result) {
+  const comment = getAttributeValue(result, 6);
+  if (comment) {
+    var length = 60;
+    var trimmedString = comment.length > length ? 
+                        comment.substring(0, length - 3) + '...' : 
+                        comment;
+    component.find('.criminal-charge').append('Commentaire : ' + trimmedString);
   }
 }
 
