@@ -45,14 +45,14 @@ const langFilter = 'FILTER(langMatches(lang(%v), "%"))';
 
 function getCountries() {
 
-  let mdx = `${ addPrefixes() }
+  let sparqlQuery = `${ addPrefixes() }
 
     SELECT DISTINCT ?cnt, ?cn WHERE {
       ?c a criminal: ; foaf:name ?n ; dbpedia2:alias ?a ; rdfs:comment ?com  ; dbo:country ?cnt . ?cnt dbp:commonName ?cn
     }
   `;
 
-  dbPediaRequest(mdx, data => {
+  dbPediaRequest(sparqlQuery).done(data => {
 
     let json = data.results.bindings;
 
@@ -69,7 +69,7 @@ function getCountries() {
 async function getAutoCompletion(object, value, response) {
 
   let input = inputs[object.attr('id')];
-  let mdx = `${ addPrefixes() }
+  let sparqlQuery = `${ addPrefixes() }
 
     SELECT DISTINCT ${ buildSelectedVariable(input) } WHERE {
       ?c a criminal: ; foaf:name ?n ; dbpedia2:alias ?a ; rdfs:comment ?com ;
@@ -78,7 +78,7 @@ async function getAutoCompletion(object, value, response) {
     } LIMIT 100
   `;
 
-  dbPediaRequest(mdx, data =>
+  dbPediaRequest(sparqlQuery).done(data =>
     response(Object.values(data.results.bindings).map(result =>
       result[Object.keys(result)[0]].value
     ))
