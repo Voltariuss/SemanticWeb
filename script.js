@@ -108,32 +108,20 @@ function buildFilters(input, value) {
 
 function onSubmitFilters(e) {
 
-  let mdx = `${ addPrefixes() }
+  let sparqlQuery = `${ addPrefixes() }
 
-    SELECT ?n, ?a, ?com WHERE {
-      ?c a criminal: ; foaf:name ?n ; dbpedia2:alias ?a ; rdfs:comment ?com
-      ${ addVariables('?c') }
+    SELECT DISTINCT ?criminal WHERE {
+      ?criminal a criminal:
+      ${ addVariables('?criminal') }
       ${ addFilters() }
     } LIMIT 100
   `;
 
   e.preventDefault();
 
-  dbPediaRequest(mdx, data => {
+  let params = { sparql: sparqlQuery };
 
-    let json = data.results.bindings;
-
-    $('#searchResults').html(`${
-      Object.values(json).map(result => `
-        <div>
-          <span>Nom : </span>${ result.n.value } -
-          <span>Pseudonyme : </span>${ result.a.value } -
-          <span>Description : </span>${ result.com.value }
-        </div>
-      `).join('')
-    }`);
-
-  });
+  window.location.href = 'search-results.html?' + $.param(params);
 
 }
 
@@ -176,13 +164,11 @@ function addFilters() {
 
 }
 
-function dbPediaRequest(sparqlRequest, callback) {
-
-  $.get('http://dbpedia.org/sparql', {
+function dbPediaRequest (sparqlRequest) {
+  return $.get('https://dbpedia.org/sparql', {
     query: sparqlRequest,
     output: 'json'
-  }).done(callback);
-
+  });
 }
 
 function generateRequest(resource, predicate) {
@@ -343,15 +329,3 @@ function requestResourceLabel(resource) {
       `, null
   )
 }
-
-$(document).ready(() => {
-
-  $('#submit').click(onSubmitFilters);
-
-  getCountries();
-
-  $('.autocomplete').autocomplete({
-    source: (value, response) => getAutoCompletion($(':focus'), value.term, response)
-  });
-
-});

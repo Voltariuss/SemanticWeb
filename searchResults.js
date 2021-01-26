@@ -1,11 +1,15 @@
-const searchRequest = `
-  PREFIX criminal: <http://dbpedia.org/ontology/Criminal>
+const urlParams = new URLSearchParams(window.location.search);
 
-  SELECT * WHERE {
-    ?criminal a criminal:
-  }
-  LIMIT 20
-`;
+// const searchRequest = `
+//   PREFIX criminal: <http://dbpedia.org/ontology/Criminal>
+
+//   SELECT * WHERE {
+//     ?criminal a criminal:
+//   }
+//   LIMIT 20
+// `;
+
+const searchRequest = urlParams.get('sparql');
 
 const predicates = [
   'foaf:name',
@@ -18,12 +22,14 @@ const predicates = [
 
 dbPediaRequest(searchRequest).then(function (data) {
   const searchResults = data.results.bindings;
+  console.log('searchResults', searchResults);
 
   searchResults.forEach(searchResult => {
-    const promises = predicates.map((p) => { return generateRequest(searchResult.criminal.value, p) })
+    console.log("searchResult=", searchResult);
+    const promises = predicates.map((p) => { return generateRequest(searchResult.criminal.value, p) });
     Promise.all(promises)
       .then(results => {
-          appendSearchResult(searchResult, results);
+        appendSearchResult(searchResult, results);
       });
   });
 });
@@ -50,10 +56,8 @@ function setName(component, result) {
   const label = getLabel(result);
 
   if (name && name != null) {
-    console.log("name", name);
     text = name;
   } else if (label && label != null) {
-    console.log("label", label);
     text = label;
   }
   component.find(".criminal-name").text(text);
@@ -97,7 +101,6 @@ function setCountryFlag(component, result) {
 function setCriminalCharge(component, result) {
   const criminalCharge = getAttributeValue(result, 5);
   if (criminalCharge) {
-    console.log('LAAAA');
     var length = 80;
     var trimmedString = criminalCharge.length > length ? 
                         criminalCharge.substring(0, length - 3) + '...' : 
