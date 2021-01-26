@@ -1,0 +1,12 @@
+.criminal {
+  cursor: pointer;
+}
+
+.criminal:hover {
+  box-shadow: 2px 2px 2px 1px #343a40;
+}
+
+.criminal-image {
+  max-width: 112px;
+  max-height: 112px;
+}
