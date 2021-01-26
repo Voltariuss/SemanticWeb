@@ -63,32 +63,51 @@ const predicates = [
     'dbpedia2:imageName'
 ]
 
-$('#criminal_info').hide();
+$('#criminal_info_block').hide();
 $('title').html(`${criminalId} - Web sémantique`);
 
-$('#imageName').css('transform','rotate('+((Math.random() * 6) - 3)+'deg)');
+$('#imageName').css('transform', 'rotate(' + ((Math.random() * 6) - 3) + 'deg)');
 $('.paper').each((i, o) => {
-    $(o).css('transform','rotate('+((Math.random() * 1.5) - 0.75)+'deg)');
+    $(o).css('transform', 'rotate(' + ((Math.random() * 1.5) - 0.75) + 'deg)');
 });
 
 $('.def_blocks').each((i, o) => {
     o.innerHTML = '█'.repeat(Math.floor(Math.random() * 5) + 10);
 });
 
+$('.collapse-div').each(function () {
+    const target = $(this).attr('data-target');
+    $('#' + target).hide();
+})
+
+$('.collapse-div').click(function () {
+    const target = $(this).attr('data-target');
+
+    if ($('#' + target).css('display') === 'none') {
+        $(this).find('.collapse-caret').css('transform', 'rotate(180deg)');
+    } else {
+        $(this).find('.collapse-caret').css('transform', 'rotate(0deg)');
+    }
+
+    $('#' + target).slideToggle();
+    
+    
+});
+
 const promises = predicates.map((p) => { return generateRequest(criminalURI, p) })
 Promise.all(promises)
     .then(results => {
         // animation to show the criminal card
-        $('#criminal_info').show();
+        $('#criminal_info_block').show();
+        $('#criminal_info_loading').hide();
         $('#criminal_info').css('opacity', '0');
         $('#criminal_info').css('bottom', '-200px');
         $('#criminal_info').animate({
             bottom: 0,
             opacity: 1,
-          }, {
-              easing: 'swing'
-          });
-        $('#criminal_info_loading').hide();
+        }, {
+            easing: 'swing'
+        });
 
         // build dom
         buildDOM(results);
@@ -96,13 +115,13 @@ Promise.all(promises)
 
 
 function getResourceName(resource, def) {
-    if (resource['name']) {
+    if (resource['name'] && resource['name']['value']) {
         return resource['name']['value'];
-    } else if (resource['label']) {
+    } else if (resource['label']  && resource['label']['value']) {
         return resource['label']['value'];
     } else {
         const splitUrl = resource[def]['value'].split('/')
-        return splitUrl[splitUrl.length-1];
+        return splitUrl[splitUrl.length - 1];
     }
 }
 
@@ -123,22 +142,33 @@ function generateTableDisplay(criminals) {
     let str = '<div class="container"><div class="row">';
     for (let c of criminals) {
         const target = getResourceIdFromUri(c['criminal']['value']);
-        str += '<div class="col-4"><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a></div>';
+        const randAngle = Math.random() * 4 - 2;
+        const randTransX = Math.random() * 20 - 10;
+        const randTransY = Math.random() * 10 - 5;
+        str += '<div class="col-4 text-center my-2" style="transform: rotate(' + randAngle + 'deg) translate(' + randTransX + 'px, ' + randTransY + 'px);"><a href="criminal.html?id='+target+'"><div class="post-it p-2"><div class="post-it-name">' + getResourceName(c, 'criminal') + '</div></div></a></div>';
     }
     str += '</div>';
 
     return str;
 }
 
+function redirectToCriminal(id) {
+    window.location.href = 'criminal.html?id=' + id;
+}
+
 function generateListDisplay(pieces) {
-    let str = '<ul>';
+    let str = '<div class="container"><div class="row">';
     for (let piece of pieces) {
         for (let c of piece['results']['bindings']) {
             const target = getResourceIdFromUri(c['criminal']['value']);
-            str += '<li><a href="./criminal.html?id=' + target + '">' + getResourceName(c, 'criminal') + '</a><div class="criminal_charge_description">(' + c['value']['value'] + ')</div></li>';
+            const randAngle = Math.random() * 4 - 2;
+
+            const randTransX = Math.random() * 20 - 10;
+            const randTransY = Math.random() * 10 - 5;
+            str += '<div class="col-4 text-center my-2" style="transform: rotate(' + randAngle + 'deg) translate(' + randTransX + 'px, ' + randTransY + 'px);"><a href="criminal.html?id='+target+'"><div class="post-it p-2"><div class="post-it-name">' + getResourceName(c, 'criminal') + '</div><div class="criminal_charge_description">(' + c['value']['value'] + ')</div></div></a></div>';
         }
     }
-    str += '</ul>';
+    str += '</div></div>';
 
     return str;
 }
@@ -239,7 +269,7 @@ function buildDOM(data) {
 
                             const countryUrl = criminal[fields[i]][j]['value'];
                             const splitCountryUrl = countryUrl.split('/');
-                            const countryName = splitCountryUrl[splitCountryUrl.length-1];
+                            const countryName = splitCountryUrl[splitCountryUrl.length - 1];
                             console.log(countryName);
 
                             $('#' + fields[i]).append(`<img src="https://wikipedia.org/wiki/Special:FilePath/Flag_of_${countryName}.svg" 
@@ -305,7 +335,7 @@ function buildDOM(data) {
         $('#similar_motive').hide();
     }
 
-    
+
     if (criminal.label.length > 0) {
         $('title').html(`${criminal.label[0]['value']} - Web sémantique`);
     } else if (criminal.name.length > 0) {
