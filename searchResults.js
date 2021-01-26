@@ -17,22 +17,30 @@ const predicates = [
   'rdfs:label',
   'dbpedia2:imageName',
   'dbo:country',
-  'dbo:criminalCharge'
+  'dbo:criminalCharge',
+  'rdfs:comment'
 ];
 
 dbPediaRequest(searchRequest).then(function (data) {
   const searchResults = data.results.bindings;
-  console.log('searchResults', searchResults);
 
-  searchResults.forEach(searchResult => {
-    console.log("searchResult=", searchResult);
-    const promises = predicates.map((p) => { return generateRequest(searchResult.criminal.value, p) });
-    Promise.all(promises)
-      .then(results => {
-        appendSearchResult(searchResult, results);
-      });
-  });
+  if (searchResults.length > 0) {
+    searchResults.forEach(searchResult => {
+      const promises = predicates.map((p) => { return generateRequest(searchResult.criminal.value, p) });
+      Promise.all(promises)
+        .then(results => {
+          appendSearchResult(searchResult, results);
+        });
+    });
+  } else {
+    noResultFound();
+  }
 });
+
+function noResultFound() {
+  $('#no-result').removeClass('d-none');
+  $('#spinner').addClass('d-none');
+}
 
 function appendSearchResult(searchResult, result) {
   const resourceId = getResourceIdFromUri(searchResult.criminal.value);
@@ -42,6 +50,7 @@ function appendSearchResult(searchResult, result) {
   setImage(component, result);
   setCountryFlag(component, result);
   setCriminalCharge(component, result);
+  setComment(component, result);
   component.removeClass('d-none');
   $('#spinner').addClass('d-none');
   component.on('click', function () {
@@ -106,6 +115,17 @@ function setCriminalCharge(component, result) {
                         criminalCharge.substring(0, length - 3) + '...' : 
                         criminalCharge;
     component.find('.criminal-charge').append('Poursuites pénales : ' + trimmedString);
+  }
+}
+
+function setComment(component, result) {
+  const comment = getAttributeValue(result, 6);
+  if (comment) {
+    var length = 60;
+    var trimmedString = comment.length > length ? 
+                        comment.substring(0, length - 3) + '...' : 
+                        comment;
+    component.find('.criminal-charge').append('Commentaire : ' + trimmedString);
   }
 }
 
