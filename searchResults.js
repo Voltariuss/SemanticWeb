@@ -16,9 +16,9 @@ const predicates = [
   'dbpedia2:alias',
   'rdfs:label',
   'dbpedia2:imageName',
+  'rdfs:comment',
   'dbo:country',
-  'dbo:criminalCharge',
-  'rdfs:comment'
+  'dbo:criminalCharge'
 ];
 
 dbPediaRequest(searchRequest).then(function (data) {
@@ -48,9 +48,9 @@ function appendSearchResult(searchResult, result) {
   setName(component, result);
   setAlias(component, result);
   setImage(component, result);
+  setComment(component, result);
   setCountryFlag(component, result);
   setCriminalCharge(component, result);
-  setComment(component, result);
   component.removeClass('d-none');
   $('#spinner').addClass('d-none');
   component.on('click', function () {
@@ -91,8 +91,19 @@ function setImage(component, result) {
   }
 }
 
+function setComment(component, result) {
+  const comment = getComment(result);
+  if (comment) {
+    var length = 100;
+    var trimmedString = comment.length > length ? 
+                        comment.substring(0, length - 3) + '...' : 
+                        comment;
+    component.find('.criminal-comment').append(trimmedString);
+  }
+}
+
 function setCountryFlag(component, result) {
-  const countriesUrl = getAttributeValues(result, 4);
+  const countriesUrl = getAttributeValues(result, 5);
   if (countriesUrl) {
     for (let i = 0; i < countriesUrl.length; i++) {
       const countryUrl = countriesUrl[i].value.value;
@@ -108,24 +119,13 @@ function setCountryFlag(component, result) {
 }
 
 function setCriminalCharge(component, result) {
-  const criminalCharge = getAttributeValue(result, 5);
+  const criminalCharge = getAttributeValue(result, 6);
   if (criminalCharge) {
     var length = 80;
     var trimmedString = criminalCharge.length > length ? 
                         criminalCharge.substring(0, length - 3) + '...' : 
                         criminalCharge;
     component.find('.criminal-charge').append('Poursuites pénales : ' + trimmedString);
-  }
-}
-
-function setComment(component, result) {
-  const comment = getAttributeValue(result, 6);
-  if (comment) {
-    var length = 60;
-    var trimmedString = comment.length > length ? 
-                        comment.substring(0, length - 3) + '...' : 
-                        comment;
-    component.find('.criminal-charge').append('Commentaire : ' + trimmedString);
   }
 }
 
@@ -149,6 +149,19 @@ function getLabel(result) {
   let value = null;
   if (result[2].results.bindings.length > 0) {
     const enLabel = result[2].results.bindings.find(function (binding) {
+      return binding.value['xml:lang'] === 'en';
+    });
+    if (enLabel) {
+      value = enLabel.value.value;
+    }
+  }
+  return value;
+}
+
+function getComment(result) {
+  let value = null;
+  if (result[4].results.bindings.length > 0) {
+    const enLabel = result[4].results.bindings.find(function (binding) {
       return binding.value['xml:lang'] === 'en';
     });
     if (enLabel) {
