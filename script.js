@@ -185,8 +185,6 @@ function dbPediaRequest(sparqlRequest, callback) {
 
 }
 
-
-
 function generateRequest(resource, predicate) {
     return dbPediaRequest(`
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
