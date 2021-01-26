@@ -329,3 +329,7 @@ function requestResourceLabel(resource) {
       `, null
   )
 }
+
+function goHomepage() {
+  window.location.href = './index.html';
+}
