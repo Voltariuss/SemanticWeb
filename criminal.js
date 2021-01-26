@@ -196,6 +196,19 @@ function showSameConvictionPenalty(criminal) {
     });
 }
 
+function showSameOccupation(criminal) {
+    const promises = criminal.occupation
+        .map(o => requestSameURI('dbo:occupation', o['value'], criminalURI));
+
+    Promise.all(promises).then(data => {
+        const str = generateTableDisplay(data.map(d => d['results']['bindings']).flat());
+
+        $('#same_occupation_list').append(str);
+        $('#same_occupation').show();
+        $('#same_occupation_loading').hide();
+    });
+}
+
 function showSimilarCriminalCharge(criminal) {
 
     const promises = criminal.criminalCharge[0]['value'].split(/[;.,()]/)
@@ -321,6 +334,13 @@ function buildDOM(data) {
         $('#same_conviction_penalty').hide();
     }
 
+    // Show criminals with the same occupation
+    if (criminal.occupation.length > 0) {
+        showSameOccupation(criminal);
+    } else {
+        $('#same_occupation').hide();
+    }
+
     // Show criminals with similar criminal charge
     if (criminal.criminalCharge.length > 0) {
         showSimilarCriminalCharge(criminal);
@@ -341,6 +361,7 @@ function buildDOM(data) {
     } else if (criminal.name.length > 0) {
         $('title').html(`${criminal.name[0]['value']} - Web sémantique`);
     }
+    
 
     if (criminal.name.length > 0) {
         $('#criminal_name').html(criminal.name[0]['value']);
