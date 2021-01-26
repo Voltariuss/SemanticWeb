@@ -22,17 +22,24 @@ const predicates = [
 
 dbPediaRequest(searchRequest).then(function (data) {
   const searchResults = data.results.bindings;
-  console.log('searchResults', searchResults);
 
-  searchResults.forEach(searchResult => {
-    console.log("searchResult=", searchResult);
-    const promises = predicates.map((p) => { return generateRequest(searchResult.criminal.value, p) });
-    Promise.all(promises)
-      .then(results => {
-        appendSearchResult(searchResult, results);
-      });
-  });
+  if (searchResults.length > 0) {
+    searchResults.forEach(searchResult => {
+      const promises = predicates.map((p) => { return generateRequest(searchResult.criminal.value, p) });
+      Promise.all(promises)
+        .then(results => {
+          appendSearchResult(searchResult, results);
+        });
+    });
+  } else {
+    noResultFound();
+  }
 });
+
+function noResultFound() {
+  $('#no-result').removeClass('d-none');
+  $('#spinner').addClass('d-none');
+}
 
 function appendSearchResult(searchResult, result) {
   const resourceId = getResourceIdFromUri(searchResult.criminal.value);
